@@ -1,10 +1,10 @@
 import streamlit as st
 from PIL import Image, ImageDraw, ImageFont
 
-# Título de la sección
-st.title(" Básico: Tu Señal de Identificación")
+st.title(" ¡Aprende Lenguaje de Señas Colombiano"!)
 
-# Descripción de la sección
+st.header(" Básico: Tu Señal de Identificación")
+
 st.write("""
 ### En esta sección, puedes crear tu propia señal de identificación personalizada. 
 
