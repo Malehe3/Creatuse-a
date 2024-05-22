@@ -1,7 +1,7 @@
 import streamlit as st
 from PIL import Image, ImageDraw, ImageFont
 
-st.title(" ¡Aprende Lenguaje de Señas Colombiano"!)
+st.title(" ¡Aprende Lenguaje de Señas Colombiano!")
 
 st.header(" Básico: Tu Señal de Identificación")
 
