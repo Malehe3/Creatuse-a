@@ -27,7 +27,6 @@ Captura una característica distintiva, ya sea física, de personalidad o relaci
 img_file_buffer = st.camera_input("Toma una Foto")
 
 if img_file_buffer is not None:
-    # Convertir la entrada de la cámara en una imagen de PIL
     image = Image.open(img_file_buffer)
     st.image(image, caption="Tu Señal de Identificación")
     
