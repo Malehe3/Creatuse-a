@@ -34,12 +34,7 @@ if img_file_buffer is not None:
     image = Image.open(img_file_buffer)
     st.image(image, caption="Tu Señal de Identificación")
 
-    # Botón para descargar la foto
-    if st.button("Descargar Señal"):
-        # Guardar la imagen en el disco
-        image.save("señal_identificacion.jpg", format="JPEG")
-
-        # Ofrecer la imagen como una descarga
+# Ofrecer la imagen como una descarga
         st.download_button(
             label="Descargar",
             data=open("señal_identificacion.jpg", "rb").read(),
