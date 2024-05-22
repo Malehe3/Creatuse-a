@@ -20,7 +20,7 @@ video_url = "https://www.youtube.com/watch?v=sGg6p03wADw"
 st.video(video_url)
 
 st.write("""
-## Ponlo en Práctica
+## ¡Ponlo en Práctica!
 Captura una característica distintiva, ya sea física, de personalidad o relacionada con una experiencia memorable y crea tu propia seña:
 """)
 
