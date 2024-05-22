@@ -33,11 +33,13 @@ if img_file_buffer is not None:
     # Convertir la entrada de la cámara en una imagen de PIL
     image = Image.open(img_file_buffer)
     st.image(image, caption="Tu Señal de Identificación")
-
-    # Botón para descargar la foto
-    if st.button("Descargar Señal"):
-        # Código para guardar la foto y descargarla
-        pass  # Placeholder, aquí debería ir el código para guardar y descargar la foto
+    
+    st.download_button(
+        label="Descargar",
+        data=open("señal_identificacion.jpg", "rb").read(),
+        file_name="señal_identificacion.jpg",
+         mime="image/jpeg" 
+    )
 
 # Mensaje para compartir la señal con amigos
 st.write("""
