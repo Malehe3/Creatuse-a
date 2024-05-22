@@ -3,11 +3,10 @@ from PIL import Image, ImageDraw, ImageFont
 
 st.title(" ¡Aprende Lenguaje de Señas Colombiano!")
 
-st.header(" Básico: Tu Señal de Identificación")
-
 st.write("""
-### En esta sección, puedes crear tu propia señal de identificación personalizada. 
+### Básico: Tu Señal de Identificación
 
+En esta sección, puedes crear tu propia señal de identificación personalizada. 
 En la comunidad de personas sordas, la presentación de los nombres se realiza de manera única y significativa a través del lenguaje de señas. 
 Este proceso no solo implica deletrear el nombre con el alfabeto manual, sino también, en muchas ocasiones, incluir un "nombre en señas". 
 Este nombre en señas, va más allá de la mera identificación, es en un reflejo de la identidad y la conexión social dentro de la comunidad.
