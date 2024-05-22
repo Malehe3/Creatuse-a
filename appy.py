@@ -1,5 +1,5 @@
 import streamlit as st
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 
 # Título de la sección
 st.title("Tu Señal de Identificación")
@@ -34,16 +34,13 @@ if img_file_buffer is not None:
     image = Image.open(img_file_buffer)
     st.image(image, caption="Tu Señal de Identificación")
 
-
     # Botón para descargar la foto
     if st.button("Descargar Señal"):
-        # Guardar la imagen en el disco
-        image.save("señal_identificacion.jpg", format="JPEG")
+        # Código para guardar la foto y descargarla
+        pass  # Placeholder, aquí debería ir el código para guardar y descargar la foto
 
-        # Ofrecer la imagen como una descarga
-        st.download_button(
-            label="Descargar",
-            data=open("señal_identificacion.jpg", "rb").read(),
-            file_name="señal_identificacion.jpg",
-            mime="image/jpeg"
-        )
+# Mensaje para compartir la señal con amigos
+st.write("""
+### ¡Comparte tu Señal!
+Una vez que hayas creado tu señal de identificación, compártela con tus amigos y familiares para que puedan reconocerte fácilmente en la comunidad.
+""")
