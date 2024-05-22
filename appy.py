@@ -2,30 +2,26 @@ import streamlit as st
 from PIL import Image, ImageDraw, ImageFont
 
 # Título de la sección
-st.title("Tu Señal de Identificación")
+st.title(" Básico: Tu Señal de Identificación")
 
 # Descripción de la sección
 st.write("""
-En esta sección, puedes crear tu propia señal de identificación personalizada. La señal de identificación es una forma única de ser reconocido en la comunidad sorda y oyente. Sigue los pasos a continuación para crear la tuya.
+En esta sección, puedes crear tu propia señal de identificación personalizada. En la comunidad de personas sordas, la presentación de los nombres se realiza de manera única y significativa a través del lenguaje de señas. Este proceso no solo implica deletrear el nombre con el alfabeto manual, sino también, en muchas ocasiones, incluir un "nombre en señas". Este nombre en señas, asignado por otros miembros de la comunidad sorda, captura una característica distintiva de la persona, ya sea física, de personalidad o relacionada con una experiencia memorable. De esta manera, la presentación de un nombre en lenguaje de señas va más allá de la mera identificación, convirtiéndose en un reflejo de la identidad y la conexión social dentro de la comunidad.
+Sigue los pasos a continuación para crear la tuya.
 """)
 
 # Video explicativo
 st.write("""
-## Video Explicativo
-
 Mira este video para obtener instrucciones detalladas sobre cómo crear tu señal de identificación.
 """)
-# Incrustar un video (por ejemplo, un video de YouTube)
-video_url = "https://www.youtube.com/watch?v=tu_video_id"  # Reemplaza con la URL de tu video
+video_url = "https://www.youtube.com/watch?v=sGg6p03wADw" 
 st.video(video_url)
 
-# Subtítulo de la sección de práctica
 st.write("""
 ## Ponlo en Práctica
 Sigue los pasos a continuación para crear tu señal de identificación:
 """)
 
-# Botón para activar la cámara y tomar una foto
 img_file_buffer = st.camera_input("Toma una Foto")
 
 # Mostrar la foto tomada
