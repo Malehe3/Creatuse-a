@@ -17,7 +17,7 @@ Sigue los pasos a continuación para crear la tuya.
 
 # Video explicativo
 st.write("""
-Mira este video para conocer mas detalles sobre la señal de identificación.
+Mira este video para conocer más detalles sobre la señal de identificación.
 """)
 video_url = "https://www.youtube.com/watch?v=sGg6p03wADw" 
 st.video(video_url)
