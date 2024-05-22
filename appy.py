@@ -10,9 +10,7 @@ En esta sección, puedes crear tu propia señal de identificación personalizada
 
 En la comunidad de personas sordas, la presentación de los nombres se realiza de manera única y significativa a través del lenguaje de señas. 
 Este proceso no solo implica deletrear el nombre con el alfabeto manual, sino también, en muchas ocasiones, incluir un "nombre en señas". 
-Este nombre en señas, asignado por otros miembros de la comunidad sorda, captura una característica distintiva de la persona, ya sea física, de personalidad o relacionada con una experiencia memorable.
-De esta manera, la presentación de un nombre en lenguaje de señas va más allá de la mera identificación, convirtiéndose en un reflejo de la identidad y la conexión social dentro de la comunidad.
-Sigue los pasos a continuación para crear la tuya.
+Este nombre en señas, va más allá de la mera identificación, es en un reflejo de la identidad y la conexión social dentro de la comunidad.
 """)
 
 # Video explicativo
@@ -24,7 +22,7 @@ st.video(video_url)
 
 st.write("""
 ## Ponlo en Práctica
-Sigue los pasos a continuación para crear tu señal de identificación:
+Captura una característica distintiva, ya sea física, de personalidad o relacionada con una experiencia memorable y crea tu propia seña:
 """)
 
 img_file_buffer = st.camera_input("Toma una Foto")
