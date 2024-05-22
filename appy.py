@@ -26,19 +26,18 @@ Sigue los pasos a continuación para crear tu señal de identificación:
 """)
 
 # Botón para activar la cámara y tomar una foto
-if st.button("Tomar Foto"):
-    # Código para activar la cámara y tomar la foto
-    # Supongamos que la foto tomada se guarda en la variable 'photo'
-    photo = None  # Placeholder, aquí debería ir el código para tomar la foto
+img_file_buffer = st.camera_input("Toma una Foto")
 
-    # Mostrar la foto tomada
-    if photo is not None:
-        st.image(photo, caption="Tu Señal de Identificación")
+# Mostrar la foto tomada
+if img_file_buffer is not None:
+    # Convertir la entrada de la cámara en una imagen de PIL
+    image = Image.open(img_file_buffer)
+    st.image(image, caption="Tu Señal de Identificación")
 
-        # Botón para descargar la foto
-        if st.button("Descargar Señal"):
-            # Código para guardar la foto y descargarla
-            pass  # Placeholder, aquí debería ir el código para guardar y descargar la foto
+    # Botón para descargar la foto
+    if st.button("Descargar Señal"):
+        # Código para guardar la foto y descargarla
+        pass  # Placeholder, aquí debería ir el código para guardar y descargar la foto
 
 # Mensaje para compartir la señal con amigos
 st.write("""
