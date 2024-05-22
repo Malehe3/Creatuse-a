@@ -6,7 +6,7 @@ st.title(" Básico: Tu Señal de Identificación")
 
 # Descripción de la sección
 st.write("""
-En esta sección, puedes crear tu propia señal de identificación personalizada. 
+### En esta sección, puedes crear tu propia señal de identificación personalizada. 
 
 En la comunidad de personas sordas, la presentación de los nombres se realiza de manera única y significativa a través del lenguaje de señas. 
 Este proceso no solo implica deletrear el nombre con el alfabeto manual, sino también, en muchas ocasiones, incluir un "nombre en señas". 
