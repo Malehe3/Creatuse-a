@@ -1,9 +1,9 @@
-import os
 import streamlit as st
 from PIL import Image, ImageDraw, ImageFont
 from bokeh.models.widgets import Button
 from bokeh.models import CustomJS
 from streamlit_bokeh_events import streamlit_bokeh_events
+from googletrans_temp import Translator  # Modificado para usar googletrans-temp
 
 st.title("¡Aprende Lenguaje de Señas Colombiano!")
 
