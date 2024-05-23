@@ -1,42 +1,30 @@
 import streamlit as st
-from PIL import Image, ImageDraw, ImageFont
+import speech_recognition as sr
 
-st.title(" ¡Aprende Lenguaje de Señas Colombiano!")
+def recognize_speech():
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        st.write("Di algo...")
+        audio = r.listen(source)
 
-st.write("""
-### Básico: Tu Señal de Identificación
+    try:
+        text = r.recognize_sphinx(audio)
+        return text.lower()
+    except sr.UnknownValueError:
+        return "No se ha entendido lo que has dicho"
+    except sr.RequestError as e:
+        return f"Error al realizar la solicitud de reconocimiento de voz; {e}"
 
-En esta sección, puedes crear tu propia señal de identificación personalizada. 
-En la comunidad de personas sordas, la presentación de los nombres se realiza de manera única y significativa a través del lenguaje de señas. 
-Este proceso no solo implica deletrear el nombre con el alfabeto manual, sino también, en muchas ocasiones, incluir un "nombre en señas". 
-Este nombre en señas, va más allá de la mera identificación, es en un reflejo de la identidad y la conexión social dentro de la comunidad.
-""")
+def main():
+    st.title("Detector de palabra")
+    st.write("Presiona el botón para hablar")
 
-# Video explicativo
-st.write("""
-Mira este video para conocer más detalles sobre la señal de identificación.
-""")
-video_url = "https://www.youtube.com/watch?v=sGg6p03wADw" 
-st.video(video_url)
+    if st.button("Hablar"):
+        spoken_text = recognize_speech()
+        if "foto" in spoken_text:
+            st.write("Correcto")
+        else:
+            st.write("Incorrecto")
 
-st.write("""
-## ¡Ponlo en Práctica!
-Captura una característica distintiva, ya sea física, de personalidad o relacionada con una experiencia memorable y crea tu propia seña:
-""")
-
-img_file_buffer = st.camera_input("Toma una Foto")
-
-if img_file_buffer is not None:
-    image = Image.open(img_file_buffer)
-    st.image(image, caption="Tu Señal de Identificación")
-    
-    st.download_button(
-        label="Descargar",
-        data=open("señal_identificacion.jpg", "rb").read(),
-        file_name="señal_identificacion.jpg",
-         mime="image/jpeg" 
-    )
-st.write("""
-### ¡Comparte tu Señal!
-Una vez que hayas creado tu señal de identificación, compártela con tus amigos y familiares para que puedan reconocerte fácilmente en la comunidad.
-""")
+if __name__ == "__main__":
+    main()
