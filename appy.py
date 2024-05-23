@@ -4,6 +4,8 @@ import speech_recognition as sr
 import tempfile
 import os
 import time
+import numpy as np
+import wave
 
 # Configuración de WebRTC
 WEBRTC_CLIENT_SETTINGS = ClientSettings(
@@ -13,6 +15,13 @@ WEBRTC_CLIENT_SETTINGS = ClientSettings(
     },
     rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
 )
+
+def save_audio(frames, sample_rate, audio_file_path):
+    with wave.open(audio_file_path, 'wb') as wf:
+        wf.setnchannels(1)
+        wf.setsampwidth(2)
+        wf.setframerate(sample_rate)
+        wf.writeframes(frames)
 
 def recognize_speech_from_audio(audio_file_path):
     recognizer = sr.Recognizer()
@@ -38,12 +47,14 @@ def main():
         if webrtc_ctx.audio_receiver:
             st.write("Grabando... di 'foto'")
             time.sleep(3)  # Graba durante 3 segundos
-            audio_frames = webrtc_ctx.audio_receiver.get_frames(timeout=1)
-            if len(audio_frames) > 0:
-                audio_data = b"".join([af.to_ndarray().tobytes() for af in audio_frames])
+            audio_frames = webrtc_ctx.audio_receiver.get_frames(timeout=5)
+            
+            if audio_frames:
+                sample_rate = audio_frames[0].sample_rate
+                audio_data = np.hstack([af.to_ndarray() for af in audio_frames]).tobytes()
 
                 with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as audio_file:
-                    audio_file.write(audio_data)
+                    save_audio(audio_data, sample_rate, audio_file.name)
                     audio_file_path = audio_file.name
 
                 spoken_text = recognize_speech_from_audio(audio_file_path)
@@ -56,3 +67,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
