@@ -8,7 +8,7 @@ def recognize_speech():
         audio = r.listen(source)
 
     try:
-        text = r.recognize_sphinx(audio)
+        text = r.recognize_google(audio, language='es-ES')
         return text.lower()
     except sr.UnknownValueError:
         return "No se ha entendido lo que has dicho"
