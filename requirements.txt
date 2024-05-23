@@ -2,7 +2,7 @@ streamlit
 Pillow
 opencv-python-headless
 speechrecognition
-streamlit-bokeh-events==0.1.4
-googletrans==4.0.0-rc1
-gtts==2.2.3
-bokeh==2.4.3
+streamlit-bokeh-events
+googletrans
+gtts
+bokeh
