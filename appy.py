@@ -1,9 +1,8 @@
 import streamlit as st
-from PIL import Image, ImageDraw, ImageFont
-from bokeh.models.widgets import Button
-from bokeh.models import CustomJS
-from streamlit_bokeh_events import streamlit_bokeh_events
-from googletrans_temp import Translator  # Modificado para usar googletrans-temp
+from PIL import Image
+from streamlit_webrtc import webrtc_streamer
+import av
+import speech_recognition as sr
 
 st.title("¡Aprende Lenguaje de Señas Colombiano!")
 
@@ -28,52 +27,41 @@ st.write("""
 Captura una característica distintiva, ya sea física, de personalidad o relacionada con una experiencia memorable y crea tu propia seña:
 """)
 
-# Botón para activar el reconocimiento de voz
-stt_button = Button(label="Comienza", width=200, button_type="success")
+class VideoProcessor:
+    def __init__(self):
+        self.recognizer = sr.Recognizer()
+        self.mic = sr.Microphone()
+        self.capture_frame = None
 
-stt_button.js_on_event("button_click", CustomJS(code="""
-    var recognition = new webkitSpeechRecognition();
-    recognition.continuous = true;
-    recognition.interimResults = true;
+    def recv(self, frame):
+        image = frame.to_image()
+        self.capture_frame = image
 
-    recognition.onresult = function (e) {
-        var value = "";
-        for (var i = e.resultIndex; i < e.results.length; ++i) {
-            if (e.results[i].isFinal) {
-                value += e.results[i][0].transcript;
-            }
-        }
-        if (value.toLowerCase().includes("foto")) {
-            document.dispatchEvent(new CustomEvent("GET_TEXT", {detail: value}));
-        }
-    }
-    recognition.start();
-    """))
+        with self.mic as source:
+            audio = self.recognizer.listen(source)
+            try:
+                text = self.recognizer.recognize_google(audio, language='es-ES')
+                if "foto" in text.lower():
+                    st.session_state.captured_image = image
+            except sr.UnknownValueError:
+                pass
+        
+        return av.VideoFrame.from_image(image)
 
-result = streamlit_bokeh_events(
-    stt_button,
-    events="GET_TEXT",
-    key="listen",
-    refresh_on_update=False,
-    override_height=75,
-    debounce_time=0)
+webrtc_ctx = webrtc_streamer(
+    key="example",
+    video_processor_factory=VideoProcessor,
+    rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+)
 
-img_file_buffer = None
-
-# Si se detecta la palabra "Foto" mediante el reconocimiento de voz
-if result and "GET_TEXT" in result:
-    st.write("Palabra 'Foto' detectada, tomando foto...")
-    img_file_buffer = st.camera_input("Toma una Foto")
-
-if img_file_buffer is not None:
-    image = Image.open(img_file_buffer)
-    st.image(image, caption="Tu Señal de Identificación")
+if "captured_image" in st.session_state:
+    st.image(st.session_state.captured_image, caption="Tu Señal de Identificación")
     
     st.download_button(
         label="Descargar",
-        data=open("señal_identificacion.jpg", "rb").read(),
+        data=st.session_state.captured_image.tobytes(),
         file_name="señal_identificacion.jpg",
-         mime="image/jpeg" 
+        mime="image/jpeg"
     )
 
 st.write("""
