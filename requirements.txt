@@ -1,3 +1,2 @@
 streamlit
-Pillow
-opencv-python-headless
+pocketsphinx
