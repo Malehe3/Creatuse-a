@@ -1,70 +1,43 @@
 import streamlit as st
-from streamlit_webrtc import webrtc_streamer, WebRtcMode, ClientSettings
-import speech_recognition as sr
-import tempfile
-import os
-import time
-import numpy as np
-import wave
+from PIL import Image, ImageDraw, ImageFont
 
-# Configuración de WebRTC
-WEBRTC_CLIENT_SETTINGS = ClientSettings(
-    media_stream_constraints={
-        "audio": True,
-        "video": False,
-    },
-    rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
-)
+st.title(" ¡Aprende Lenguaje de Señas Colombiano!")
 
-def save_audio(frames, sample_rate, audio_file_path):
-    with wave.open(audio_file_path, 'wb') as wf:
-        wf.setnchannels(1)
-        wf.setsampwidth(2)
-        wf.setframerate(sample_rate)
-        wf.writeframes(frames)
+st.write("""
+### Básico: Tu Señal de Identificación
 
-def recognize_speech_from_audio(audio_file_path):
-    recognizer = sr.Recognizer()
-    with sr.AudioFile(audio_file_path) as source:
-        audio_data = recognizer.record(source)
-        try:
-            text = recognizer.recognize_google(audio_data, language='es-ES')
-            return text.lower()
-        except sr.UnknownValueError:
-            return "No se ha entendido lo que has dicho"
-        except sr.RequestError as e:
-            return f"Error al realizar la solicitud de reconocimiento de voz; {e}"
+En esta sección, puedes crear tu propia señal de identificación personalizada. 
+En la comunidad de personas sordas, la presentación de los nombres se realiza de manera única y significativa a través del lenguaje de señas. 
+Este proceso no solo implica deletrear el nombre con el alfabeto manual, sino también, en muchas ocasiones, incluir un "nombre en señas". 
+Este nombre en señas, va más allá de la mera identificación, es en un reflejo de la identidad y la conexión social dentro de la comunidad.
+""")
 
-def main():
-    st.title("Detector de palabra")
-    st.write("Presiona el botón para grabar y hablar")
+# Video explicativo
+st.write("""
+Mira este video para conocer más detalles sobre la señal de identificación.
+""")
+video_url = "https://www.youtube.com/watch?v=sGg6p03wADw" 
+st.video(video_url)
 
-    webrtc_ctx = webrtc_streamer(
-        key="example", mode=WebRtcMode.SENDRECV, client_settings=WEBRTC_CLIENT_SETTINGS
+st.write("""
+## ¡Ponlo en Práctica!
+Captura una característica distintiva, ya sea física, de personalidad o relacionada con una experiencia memorable y crea tu propia seña:
+""")
+
+img_file_buffer = st.camera_input("Toma una Foto")
+
+if img_file_buffer is not None:
+    image = Image.open(img_file_buffer)
+    st.image(image, caption="Tu Señal de Identificación")
+    
+    st.download_button(
+        label="Descargar",
+        data=open("señal_identificacion.jpg", "rb").read(),
+        file_name="señal_identificacion.jpg",
+         mime="image/jpeg" 
     )
-
-    if st.button("Start"):
-        if webrtc_ctx.audio_receiver:
-            st.write("Grabando... di 'foto'")
-            time.sleep(3)  # Graba durante 3 segundos
-            audio_frames = webrtc_ctx.audio_receiver.get_frames(timeout=5)
-            
-            if audio_frames:
-                sample_rate = audio_frames[0].sample_rate
-                audio_data = np.hstack([af.to_ndarray() for af in audio_frames]).tobytes()
-
-                with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as audio_file:
-                    save_audio(audio_data, sample_rate, audio_file.name)
-                    audio_file_path = audio_file.name
-
-                spoken_text = recognize_speech_from_audio(audio_file_path)
-                os.remove(audio_file_path)
-                st.write(f"Has dicho: {spoken_text}")
-                if "foto" in spoken_text:
-                    st.write("Correcto")
-                else:
-                    st.write("Incorrecto")
-
-if __name__ == "__main__":
-    main()
+st.write("""
+### ¡Comparte tu Señal!
+Una vez que hayas creado tu señal de identificación, compártela con tus amigos y familiares para que puedan reconocerte fácilmente en la comunidad.
+""")
 
