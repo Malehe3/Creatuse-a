@@ -1,22 +1,21 @@
 import streamlit as st
-import sounddevice as sd
-import scipy.io.wavfile as wav
-import numpy as np
+from streamlit_webrtc import webrtc_streamer, WebRtcMode, ClientSettings
 import speech_recognition as sr
+import tempfile
+import os
 
-def record_audio(duration, fs):
-    st.write("Grabando...")
-    recording = sd.rec(int(duration * fs), samplerate=fs, channels=2, dtype=np.int16)
-    sd.wait()  # Esperar a que termine la grabación
-    st.write("Grabación completa.")
-    return recording, fs
+# Configuración de WebRTC
+WEBRTC_CLIENT_SETTINGS = ClientSettings(
+    media_stream_constraints={
+        "audio": True,
+        "video": False,
+    },
+    rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+)
 
-def save_audio(file_path, recording, fs):
-    wav.write(file_path, fs, recording)
-
-def recognize_speech_from_file(file_path):
+def recognize_speech_from_audio(audio_file_path):
     recognizer = sr.Recognizer()
-    with sr.AudioFile(file_path) as source:
+    with sr.AudioFile(audio_file_path) as source:
         audio_data = recognizer.record(source)
         try:
             text = recognizer.recognize_google(audio_data, language='es-ES')
@@ -30,19 +29,26 @@ def main():
     st.title("Detector de palabra")
     st.write("Presiona el botón para grabar y hablar")
 
-    duration = st.slider("Duración de la grabación (segundos)", 1, 10, 3)
-    fs = 44100  # Frecuencia de muestreo
+    webrtc_ctx = webrtc_streamer(
+        key="example", mode=WebRtcMode.SENDRECV, client_settings=WEBRTC_CLIENT_SETTINGS
+    )
 
-    if st.button("Grabar"):
-        recording, fs = record_audio(duration, fs)
-        file_path = "recorded_audio.wav"
-        save_audio(file_path, recording, fs)
-        spoken_text = recognize_speech_from_file(file_path)
-        st.write(f"Has dicho: {spoken_text}")
-        if "foto" in spoken_text:
-            st.write("Correcto")
-        else:
-            st.write("Incorrecto")
+    if webrtc_ctx.audio_receiver:
+        audio_frames = webrtc_ctx.audio_receiver.get_frames(timeout=1)
+        if len(audio_frames) > 0:
+            audio_data = b"".join([af.to_ndarray().tobytes() for af in audio_frames])
+
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as audio_file:
+                audio_file.write(audio_data)
+                audio_file_path = audio_file.name
+
+            spoken_text = recognize_speech_from_audio(audio_file_path)
+            os.remove(audio_file_path)
+            st.write(f"Has dicho: {spoken_text}")
+            if "foto" in spoken_text:
+                st.write("Correcto")
+            else:
+                st.write("Incorrecto")
 
 if __name__ == "__main__":
     main()
