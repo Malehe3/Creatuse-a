@@ -1,4 +1,4 @@
-mport streamlit as st
+Import streamlit as st
 from PIL import Image, ImageDraw, ImageFont
 
 st.title(" ¡Aprende Lenguaje de Señas Colombiano!")
