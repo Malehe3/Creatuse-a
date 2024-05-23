@@ -3,6 +3,7 @@ from streamlit_webrtc import webrtc_streamer, WebRtcMode, ClientSettings
 import speech_recognition as sr
 import tempfile
 import os
+import time
 
 # Configuración de WebRTC
 WEBRTC_CLIENT_SETTINGS = ClientSettings(
@@ -33,23 +34,25 @@ def main():
         key="example", mode=WebRtcMode.SENDRECV, client_settings=WEBRTC_CLIENT_SETTINGS
     )
 
-    if webrtc_ctx.audio_receiver:
-        audio_frames = webrtc_ctx.audio_receiver.get_frames(timeout=1)
-        if len(audio_frames) > 0:
-            audio_data = b"".join([af.to_ndarray().tobytes() for af in audio_frames])
+    if st.button("Start"):
+        if webrtc_ctx.audio_receiver:
+            st.write("Grabando... di 'foto'")
+            time.sleep(3)  # Graba durante 3 segundos
+            audio_frames = webrtc_ctx.audio_receiver.get_frames(timeout=1)
+            if len(audio_frames) > 0:
+                audio_data = b"".join([af.to_ndarray().tobytes() for af in audio_frames])
 
-            with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as audio_file:
-                audio_file.write(audio_data)
-                audio_file_path = audio_file.name
+                with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as audio_file:
+                    audio_file.write(audio_data)
+                    audio_file_path = audio_file.name
 
-            spoken_text = recognize_speech_from_audio(audio_file_path)
-            os.remove(audio_file_path)
-            st.write(f"Has dicho: {spoken_text}")
-            if "foto" in spoken_text:
-                st.write("Correcto")
-            else:
-                st.write("Incorrecto")
+                spoken_text = recognize_speech_from_audio(audio_file_path)
+                os.remove(audio_file_path)
+                st.write(f"Has dicho: {spoken_text}")
+                if "foto" in spoken_text:
+                    st.write("Correcto")
+                else:
+                    st.write("Incorrecto")
 
 if __name__ == "__main__":
     main()
-
